@@ -1,0 +1,116 @@
+u<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Landscape Portfolio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #0f0f0f;
+      color: #fff;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .portfolio {
+      display: flex;
+      flex-direction: row;
+      min-height: 100vh;
+      width: max-content;
+    }
+
+    .section {
+      min-width: 100vw;
+      padding: 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      background: #111;
+      border-right: 1px solid #333;
+      scroll-snap-align: start;
+    }
+
+    .section:nth-child(even) {
+      background: #1a1a1a;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      max-width: 600px;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.8);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      z-index: 100;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #0ff;
+    }
+
+    html {
+      scroll-snap-type: x mandatory;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <div class="portfolio">
+    <section class="section" id="home">
+      <h1>Hello, I'm Aadhil</h1>
+      <p>Welcome to my landscape portfolio — designed to scroll sideways! I'm a tech enthusiast with a passion for Linux, networking, and building cool systems.</p>
+    </section>
+
+    <section class="section" id="about">
+      <h1>About Me</h1>
+      <p>I’ve worked across PC building, car audio fitting, cybersecurity training, and Linux OS development. I love making things that work well and look slick.</p>
+    </section>
+
+    <section class="section" id="projects">
+      <h1>Projects</h1>
+      <p>Check out my tools like TERMINAL-TOOLS, SESSION--TO--SESSION, and my custom lightweight OS for special hardware setups.</p>
+    </section>
+
+    <section class="section" id="contact">
+      <h1>Contact</h1>
+      <p>Email: yourmail@example.com<br>GitHub: <a href="https://github.com/aadhilm" style="color: cyan;">@aadhilm</a><br>Blog: <a href="https://cyberwallnet.blogspot.com" style="color: cyan;">CyberWallNet</a></p>
+    </section>
+  </div>
+
+</body>
+</html>
