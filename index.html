@@ -1,116 +1,1179 @@
-u<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Landscape Portfolio</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robot Face 3.0</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-    body {
-      background-color: #0f0f0f;
-      color: #fff;
-      overflow-x: auto;
-      overflow-y: hidden;
-    }
+  body {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    overflow-x: hidden;
+    color: #f0f0f0;
+  }
 
-    .portfolio {
-      display: flex;
-      flex-direction: row;
-      min-height: 100vh;
-      width: max-content;
-    }
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
 
-    .section {
-      min-width: 100vw;
-      padding: 4rem;
-      display: flex;
+  .header h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(90deg, #00f7ff, #00ccff, #0099ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 8px;
+    text-shadow: 0 0 30px rgba(0, 247, 255, 0.3);
+  }
+
+  .header p {
+    color: #888;
+    font-size: 0.9rem;
+  }
+
+  /* Robot head */
+  .robot {
+    width: 220px;
+    height: 190px;
+    background: linear-gradient(145deg, #000000, #1a1a1a);
+    border-radius: 35px;
+    border: 10px solid #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    cursor: none;
+    box-shadow: 
+      0 0 50px rgba(0, 247, 255, 0.1),
+      inset 0 0 20px rgba(0, 247, 255, 0.05);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .robot:hover {
+    border-color: #3a3a3a;
+    box-shadow: 
+      0 0 80px rgba(0, 247, 255, 0.2),
+      inset 0 0 30px rgba(0, 247, 255, 0.1);
+  }
+
+  /* Mouse tracking indicator */
+  .mouse-track {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #ff3366;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.8;
+    display: none;
+    box-shadow: 0 0 15px #ff3366;
+    transition: transform 0.1s;
+  }
+
+  /* Eyes container */
+  .eyes {
+    display: flex;
+    gap: 40px;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Eye base */
+  .eye {
+    width: 40px;
+    height: 40px;
+    background: #00f7ff;
+    border-radius: 8px;
+    box-shadow: 
+      0 0 20px #00f7ff,
+      inset 0 0 10px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Eye inner detail */
+  .eye::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    top: 6px;
+    left: 10px;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Eye glow effect */
+  .eye::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    border-radius: inherit;
+  }
+
+  /* Mouth */
+  .mouth {
+    position: absolute;
+    bottom: 40px;
+    width: 30px;
+    height: 20px;
+    border-radius: 50%;
+    border: 4px solid transparent;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: none;
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+
+  /* ========== IMPROVED EXPRESSIONS ========== */
+  
+  /* Core */
+  .idle .eye {
+    animation: idleGlow 4s infinite;
+  }
+
+  @keyframes idleGlow {
+    0%, 100% { 
+      box-shadow: 0 0 20px #00f7ff,
+                  inset 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 40px #00f7ff,
+                  0 0 60px rgba(0, 247, 255, 0.5),
+                  inset 0 0 15px rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  /* Enhanced Look Directions */
+  .look-left .eyes { 
+    transform: translateX(-25px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .look-left .eye::after { left: 6px; }
+
+  .look-right .eyes { 
+    transform: translateX(25px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .look-right .eye::after { left: 20px; }
+
+  .look-up .eyes { 
+    transform: translateY(-25px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .look-up .eye::after { top: 4px; }
+
+  .look-down .eyes { 
+    transform: translateY(25px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .look-down .eye::after { top: 20px; }
+
+  /* Enhanced Positive Expressions */
+  .happy .eye {
+    height: 22px;
+    border-radius: 0 0 25px 25px;
+    margin-top: 10px;
+    animation: happyBounce 2s infinite;
+  }
+
+  @keyframes happyBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  .excited .eye {
+    width: 50px;
+    height: 50px;
+    animation: excitedPulse 0.6s infinite alternate;
+  }
+
+  @keyframes excitedPulse {
+    from { 
+      transform: scale(1);
+      box-shadow: 0 0 25px #00f7ff;
+    }
+    to { 
+      transform: scale(1.1);
+      box-shadow: 0 0 45px #00f7ff, 0 0 70px rgba(0, 247, 255, 0.6);
+    }
+  }
+
+  /* Enhanced Negative Expressions */
+  .angry .eye {
+    transform: rotate(-15deg);
+    background: #ff4444;
+    box-shadow: 0 0 25px #ff4444;
+    animation: angryPulse 0.5s infinite alternate;
+  }
+
+  .angry .eye:last-child {
+    transform: rotate(15deg);
+  }
+
+  @keyframes angryPulse {
+    from { opacity: 1; }
+    to { opacity: 0.8; }
+  }
+
+  .sad .eye {
+    border-radius: 25px 25px 8px 8px;
+    height: 25px;
+    margin-top: -10px;
+    background: #3399ff;
+    box-shadow: 0 0 20px #3399ff;
+    animation: sadDrop 3s infinite;
+  }
+
+  @keyframes sadDrop {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+  }
+
+  /* Enhanced System Expressions */
+  .booting .eye {
+    width: 5px;
+    height: 5px;
+    animation: bootingSequence 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes bootingSequence {
+    0% { 
+      width: 5px;
+      height: 5px;
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    20% { 
+      width: 45px;
+      height: 5px;
+      opacity: 1;
+    }
+    40% {
+      width: 5px;
+      height: 45px;
+    }
+    60% {
+      width: 45px;
+      height: 45px;
+    }
+    80% {
+      transform: scale(1.1);
+    }
+    100% { 
+      width: 40px;
+      height: 40px;
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Enhanced Special Expressions */
+  .hypnotized .eye {
+    background: conic-gradient(#00f7ff, #cc66ff, #00ccff, #00f7ff);
+    animation: spiral 1.5s linear infinite;
+    border-radius: 50%;
+  }
+
+  .glitch .eye {
+    animation: glitchEffect 0.15s infinite;
+    background: #00ff00;
+  }
+
+  @keyframes glitchEffect {
+    0% { 
+      transform: translate(0) scale(1);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    20% { 
+      transform: translate(-4px, 2px) scale(1.02);
+      clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
+    }
+    40% { 
+      transform: translate(2px, -2px) scale(0.98);
+      clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
+    }
+    60% { 
+      transform: translate(4px, 2px) scale(1.01);
+      clip-path: polygon(0 10%, 100% 0, 100% 90%, 0 100%);
+    }
+    80% { 
+      transform: translate(-2px, -2px) scale(0.99);
+      clip-path: polygon(0 0, 100% 10%, 100% 100%, 0 90%);
+    }
+    100% { 
+      transform: translate(0) scale(1);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+  }
+
+  /* New Enhanced Expressions */
+  .matrix .eye {
+    background: #00ff00;
+    box-shadow: 0 0 30px #00ff00;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .matrix .eye::before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(transparent, #00ff00, transparent);
+    animation: matrixRain 1.5s linear infinite;
+  }
+
+  @keyframes matrixRain {
+    0% { top: -100%; }
+    100% { top: 100%; }
+  }
+
+  .hologram .eye {
+    background: rgba(102, 204, 255, 0.3);
+    box-shadow: 
+      0 0 25px rgba(102, 204, 255, 0.5),
+      inset 0 0 15px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    animation: hologramFlicker 2s infinite;
+    border: 1px solid rgba(102, 204, 255, 0.5);
+  }
+
+  @keyframes hologramFlicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .laser .eye {
+    background: #ff0000;
+    box-shadow: 0 0 30px #ff0000;
+    animation: laserScan 2s infinite alternate;
+  }
+
+  @keyframes laserScan {
+    0% { transform: translateX(-10px); }
+    100% { transform: translateX(10px); }
+  }
+
+  /* Expression Groups Container */
+  .expressions-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 30px;
+  }
+
+  .expression-group {
+    background: rgba(30, 30, 30, 0.8);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(0, 247, 255, 0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .expression-group h3 {
+    color: #00f7ff;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .expression-group h3::before {
+    content: '▶';
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+
+  /* Enhanced Controls */
+  .controls-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding: 25px;
+    background: rgba(25, 25, 25, 0.9);
+    border-radius: 15px;
+    border: 1px solid rgba(0, 247, 255, 0.2);
+    width: 100%;
+    max-width: 800px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .control-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    width: 100%;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #ddd;
+    font-size: 0.9rem;
+    min-width: 180px;
+  }
+
+  .control-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s;
+  }
+
+  .control-group label:hover {
+    color: #00f7ff;
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #00f7ff;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .slider-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  input[type="range"] {
+    flex: 1;
+    height: 6px;
+    background: linear-gradient(90deg, #222, #444);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+    transition: all 0.3s;
+  }
+
+  input[type="range"]:hover {
+    background: linear-gradient(90deg, #333, #555);
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #00f7ff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px #00f7ff;
+    transition: all 0.2s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px #00f7ff;
+  }
+
+  /* Enhanced Buttons */
+  .expression-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+
+  .btn {
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #2a2a2a, #222);
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #ddd;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 247, 255, 0.1), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn:hover {
+    background: linear-gradient(135deg, #333, #2a2a2a);
+    border-color: #00f7ff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 247, 255, 0.2);
+  }
+
+  .btn:hover::before {
+    left: 100%;
+  }
+
+  .btn.active {
+    background: linear-gradient(135deg, #00f7ff, #00ccff);
+    color: #000;
+    border-color: #00f7ff;
+    box-shadow: 0 0 20px rgba(0, 247, 255, 0.4);
+    font-weight: 600;
+  }
+
+  .btn-icon {
+    font-size: 0.9rem;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    color: #666;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    max-width: 800px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+    font-size: 0.8rem;
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+  }
+
+  .stat.online {
+    color: #00ff00;
+  }
+
+  .stat.offline {
+    color: #ff4444;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .header h1 {
+      font-size: 2rem;
+    }
+    
+    .robot {
+      width: 180px;
+      height: 150px;
+    }
+    
+    .eye {
+      width: 35px;
+      height: 35px;
+    }
+    
+    .eyes {
+      gap: 30px;
+    }
+    
+    .expressions-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .expression-buttons {
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    }
+    
+    .control-row {
       flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      background: #111;
-      border-right: 1px solid #333;
-      scroll-snap-align: start;
+      align-items: center;
     }
+  }
 
-    .section:nth-child(even) {
-      background: #1a1a1a;
+  @media (max-width: 480px) {
+    .robot {
+      width: 150px;
+      height: 130px;
     }
+    
+    .eye {
+      width: 30px;
+      height: 30px;
+    }
+    
+    .eyes {
+      gap: 25px;
+    }
+    
+    .btn {
+      padding: 10px 12px;
+      font-size: 0.8rem;
+    }
+  }
 
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
+  /* Loading animation */
+  .loading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(0, 247, 255, 0.1) 50%, 
+      transparent 100%);
+    animation: loadingShimmer 1.5s infinite;
+  }
 
-    p {
-      font-size: 1.2rem;
-      max-width: 600px;
-    }
-
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0,0,0,0.8);
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      z-index: 100;
-    }
-
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
-
-    nav a:hover {
-      color: #0ff;
-    }
-
-    html {
-      scroll-snap-type: x mandatory;
-    }
-  </style>
+  @keyframes loadingShimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+</style>
 </head>
 <body>
 
-  <nav>
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#projects">Projects</a>
-    <a href="#contact">Contact</a>
-  </nav>
+<div class="header">
+  <h1>🤖 Robot Face 3.0</h1>
+  <p>Interactive robot with 50+ emotional expressions</p>
+</div>
 
-  <div class="portfolio">
-    <section class="section" id="home">
-      <h1>Hello, I'm Aadhil</h1>
-      <p>Welcome to my landscape portfolio — designed to scroll sideways! I'm a tech enthusiast with a passion for Linux, networking, and building cool systems.</p>
-    </section>
+<div id="robot" class="robot">
+  <div id="mouseTrack" class="mouse-track"></div>
+  <div class="eyes">
+    <div class="eye"></div>
+    <div class="eye"></div>
+  </div>
+  <div class="mouth"></div>
+</div>
 
-    <section class="section" id="about">
-      <h1>About Me</h1>
-      <p>I’ve worked across PC building, car audio fitting, cybersecurity training, and Linux OS development. I love making things that work well and look slick.</p>
-    </section>
+<div class="controls-panel">
+  <div class="control-row">
+    <div class="control-group">
+      <label class="checkbox-label">
+        <input type="checkbox" id="mouseTracking" onchange="toggleMouseTracking()">
+        <span class="btn-icon">👁️</span> Mouse Tracking
+      </label>
+    </div>
+    
+    <div class="control-group">
+      <label class="checkbox-label">
+        <input type="checkbox" id="autoBlink" checked onchange="toggleAutoBlink()">
+        <span class="btn-icon">👁️</span> Auto Blink
+      </label>
+    </div>
+    
+    <div class="control-group">
+      <div class="slider-container">
+        <span class="btn-icon">⚡</span>
+        <input type="range" id="blinkSpeed" min="1000" max="8000" value="3000" oninput="updateBlinkSpeed()">
+        <span id="blinkSpeedValue">3.0s</span>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <section class="section" id="projects">
-      <h1>Projects</h1>
-      <p>Check out my tools like TERMINAL-TOOLS, SESSION--TO--SESSION, and my custom lightweight OS for special hardware setups.</p>
-    </section>
-
-    <section class="section" id="contact">
-      <h1>Contact</h1>
-      <p>Email: yourmail@example.com<br>GitHub: <a href="https://github.com/aadhilm" style="color: cyan;">@aadhilm</a><br>Blog: <a href="https://cyberwallnet.blogspot.com" style="color: cyan;">CyberWallNet</a></p>
-    </section>
+<div class="expressions-container">
+  <!-- Core Expressions -->
+  <div class="expression-group">
+    <h3>Core</h3>
+    <div class="expression-buttons">
+      <button class="btn" onclick="setExpression('')">
+        <span class="btn-icon">🌀</span> Normal
+      </button>
+      <button class="btn" onclick="setExpression('idle')">
+        <span class="btn-icon">💤</span> Idle
+      </button>
+      <button class="btn" onclick="setExpression('look-left')">
+        <span class="btn-icon">👈</span> Left
+      </button>
+      <button class="btn" onclick="setExpression('look-right')">
+        <span class="btn-icon">👉</span> Right
+      </button>
+      <button class="btn" onclick="setExpression('look-up')">
+        <span class="btn-icon">👆</span> Up
+      </button>
+      <button class="btn" onclick="setExpression('look-down')">
+        <span class="btn-icon">👇</span> Down
+      </button>
+    </div>
   </div>
 
+  <!-- Positive Emotions -->
+  <div class="expression-group">
+    <h3>Positive</h3>
+    <div class="expression-buttons">
+      <button class="btn" onclick="setExpression('happy')">
+        <span class="btn-icon">😊</span> Happy
+      </button>
+      <button class="btn" onclick="setExpression('excited')">
+        <span class="btn-icon">🎉</span> Excited
+      </button>
+      <button class="btn" onclick="setExpression('proud')">
+        <span class="btn-icon">💪</span> Proud
+      </button>
+      <button class="btn" onclick="setExpression('playful')">
+        <span class="btn-icon">🎮</span> Playful
+      </button>
+      <button class="btn" onclick="setExpression('curious')">
+        <span class="btn-icon">🤔</span> Curious
+      </button>
+    </div>
+  </div>
+
+  <!-- Negative Emotions -->
+  <div class="expression-group">
+    <h3>Negative</h3>
+    <div class="expression-buttons">
+      <button class="btn" onclick="setExpression('angry')">
+        <span class="btn-icon">😠</span> Angry
+      </button>
+      <button class="btn" onclick="setExpression('sad')">
+        <span class="btn-icon">😢</span> Sad
+      </button>
+      <button class="btn" onclick="setExpression('annoyed')">
+        <span class="btn-icon">😤</span> Annoyed
+      </button>
+      <button class="btn" onclick="setExpression('tired')">
+        <span class="btn-icon">😴</span> Tired
+      </button>
+      <button class="btn" onclick="setExpression('disappointed')">
+        <span class="btn-icon">😞</span> Disappointed
+      </button>
+    </div>
+  </div>
+
+  <!-- System States -->
+  <div class="expression-group">
+    <h3>System</h3>
+    <div class="expression-buttons">
+      <button class="btn" onclick="setExpression('booting')">
+        <span class="btn-icon">🚀</span> Booting
+      </button>
+      <button class="btn" onclick="setExpression('sleeping')">
+        <span class="btn-icon">💤</span> Sleep
+      </button>
+      <button class="btn" onclick="setExpression('charging')">
+        <span class="btn-icon>🔋</span> Charging
+      </button>
+      <button class="btn" onclick="setExpression('low-battery')">
+        <span class="btn-icon">🪫</span> Low Power
+      </button>
+      <button class="btn" onclick="setExpression('shutting-down')">
+        <span class="btn-icon">⏻</span> Shutdown
+      </button>
+    </div>
+  </div>
+
+  <!-- Special Effects -->
+  <div class="expression-group">
+    <h3>Special</h3>
+    <div class="expression-buttons">
+      <button class="btn" onclick="setExpression('matrix')">
+        <span class="btn-icon">👓</span> Matrix
+      </button>
+      <button class="btn" onclick="setExpression('hologram')">
+        <span class="btn-icon">👻</span> Hologram
+      </button>
+      <button class="btn" onclick="setExpression('laser')">
+        <span class="btn-icon">🔴</span> Laser
+      </button>
+      <button class="btn" onclick="setExpression('hypnotized')">
+        <span class="btn-icon">🌀</span> Hypnotized
+      </button>
+      <button class="btn" onclick="setExpression('glitch')">
+        <span class="btn-icon">📺</span> Glitch
+      </button>
+    </div>
+  </div>
+
+  <!-- Emotional States -->
+  <div class="expression-group">
+    <h3>Emotional</h3>
+    <div class="expression-buttons">
+      <button class="btn" onclick="setExpression('confused')">
+        <span class="btn-icon">😕</span> Confused
+      </button>
+      <button class="btn" onclick="setExpression('thinking')">
+        <span class="btn-icon">🧠</span> Thinking
+      </button>
+      <button class="btn" onclick="setExpression('surprised')">
+        <span class="btn-icon">😲</span> Surprised
+      </button>
+      <button class="btn" onclick="setExpression('shock')">
+        <span class="btn-icon">⚡</span> Shock
+      </button>
+      <button class="btn" onclick="setExpression('worried')">
+        <span class="btn-icon">😟</span> Worried
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Robot Face v3.0 | Interactive robot simulation with smooth animations and real-time interactions</p>
+  <div class="stats">
+    <div class="stat online">
+      <span class="btn-icon">●</span>
+      <span id="trackingStatus">Tracking: OFF</span>
+    </div>
+    <div class="stat online">
+      <span class="btn-icon">●</span>
+      <span>Auto-blink: ON</span>
+    </div>
+    <div class="stat">
+      <span class="btn-icon">🔧</span>
+      <span>50+ Expressions</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentExpression = '';
+  let autoBlinkInterval;
+  let mouseTracking = false;
+  let autoBlinkEnabled = true;
+  let blinkSpeed = 3000;
+  let robotRect;
+  let mouseHistory = [];
+  const MAX_HISTORY = 5;
+
+  // Enhanced expression mapping with smooth transitions
+  const expressionConfig = {
+    '': { 
+      name: 'Normal',
+      color: '#00f7ff',
+      duration: 0
+    },
+    'idle': {
+      name: 'Idle',
+      color: '#00f7ff',
+      duration: 'infinite'
+    },
+    'happy': {
+      name: 'Happy',
+      color: '#00ff88',
+      duration: 2000
+    },
+    'angry': {
+      name: 'Angry',
+      color: '#ff4444',
+      duration: 1500
+    },
+    'sad': {
+      name: 'Sad',
+      color: '#3399ff',
+      duration: 3000
+    },
+    'booting': {
+      name: 'Booting',
+      color: '#00f7ff',
+      duration: 2500
+    },
+    'matrix': {
+      name: 'Matrix',
+      color: '#00ff00',
+      duration: 'infinite'
+    },
+    'hologram': {
+      name: 'Hologram',
+      color: '#66ccff',
+      duration: 'infinite'
+    }
+  };
+
+  function setExpression(expression) {
+    const robot = document.getElementById('robot');
+    const mouth = document.querySelector('.mouth');
+    const config = expressionConfig[expression] || {};
+    
+    // Add loading effect
+    robot.classList.add('loading');
+    
+    // Hide mouth by default
+    mouth.style.display = 'none';
+    
+    // Clear active state from all buttons
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    
+    // Set new expression with transition
+    setTimeout(() => {
+      robot.className = 'robot ' + expression;
+      robot.classList.remove('loading');
+      
+      // Update eye color based on expression
+      if (config.color) {
+        document.querySelectorAll('.eye').forEach(eye => {
+          eye.style.background = config.color;
+          eye.style.boxShadow = `0 0 20px ${config.color}`;
+        });
+      }
+      
+      currentExpression = expression;
+      
+      // Mark active button
+      const activeBtn = Array.from(document.querySelectorAll('.btn'))
+        .find(btn => {
+          const expr = btn.getAttribute('onclick')?.replace("setExpression('", "").replace("')", "");
+          return expr === expression;
+        });
+      
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+      }
+      
+      // Clear auto-behaviors
+      clearInterval(autoBlinkInterval);
+      
+      // Restart auto-behaviors if in normal state
+      if (expression === '' && autoBlinkEnabled) {
+        setTimeout(() => {
+          startAutoBlink();
+        }, 1000);
+      }
+      
+      // Auto-reset timed expressions
+      if (config.duration && config.duration !== 'infinite') {
+        setTimeout(() => {
+          if (currentExpression === expression) {
+            setExpression('');
+          }
+        }, config.duration);
+      }
+    }, 200);
+  }
+
+  function startAutoBlink() {
+    clearInterval(autoBlinkInterval);
+    autoBlinkInterval = setInterval(() => {
+      if (currentExpression === '' && autoBlinkEnabled) {
+        const robot = document.getElementById('robot');
+        robot.classList.add('blink');
+        setTimeout(() => {
+          robot.classList.remove('blink');
+        }, 150);
+      }
+    }, blinkSpeed);
+  }
+
+  function toggleMouseTracking() {
+    mouseTracking = !mouseTracking;
+    const mouseTrack = document.getElementById('mouseTrack');
+    const trackingStatus = document.getElementById('trackingStatus');
+    
+    if (mouseTracking) {
+      mouseTrack.style.display = 'block';
+      trackingStatus.textContent = 'Tracking: ON';
+      trackingStatus.parentElement.className = 'stat online';
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('click', handleMouseClick);
+    } else {
+      mouseTrack.style.display = 'none';
+      trackingStatus.textContent = 'Tracking: OFF';
+      trackingStatus.parentElement.className = 'stat offline';
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('click', handleMouseClick);
+      
+      // Smoothly reset eyes to center
+      if (currentExpression === '') {
+        const robot = document.getElementById('robot');
+        ['look-left', 'look-right', 'look-up', 'look-down'].forEach(cls => {
+          robot.classList.remove(cls);
+        });
+      }
+    }
+  }
+
+  function handleMouseMove(e) {
+    if (!mouseTracking || currentExpression !== '') return;
+    
+    const robot = document.getElementById('robot');
+    const mouseTrack = document.getElementById('mouseTrack');
+    
+    // Update mouse indicator with history
+    mouseHistory.unshift({ x: e.clientX, y: e.clientY });
+    if (mouseHistory.length > MAX_HISTORY) mouseHistory.pop();
+    
+    // Smooth tracking position
+    const avgX = mouseHistory.reduce((sum, pos) => sum + pos.x, 0) / mouseHistory.length;
+    const avgY = mouseHistory.reduce((sum, pos) => sum + pos.y, 0) / mouseHistory.length;
+    
+    mouseTrack.style.left = (avgX - robot.getBoundingClientRect().left - 4) + 'px';
+    mouseTrack.style.top = (avgY - robot.getBoundingClientRect().top - 4) + 'px';
+    
+    // Enhanced direction tracking with smooth transitions
+    const robotRect = robot.getBoundingClientRect();
+    const robotCenterX = robotRect.left + robotRect.width / 2;
+    const robotCenterY = robotRect.top + robotRect.height / 2;
+    
+    const offsetX = e.clientX - robotCenterX;
+    const offsetY = e.clientY - robotCenterY;
+    const distance = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
+    const threshold = 60;
+    
+    // Remove all direction classes
+    const directionClasses = ['look-left', 'look-right', 'look-up', 'look-down'];
+    directionClasses.forEach(cls => robot.classList.remove(cls));
+    
+    if (distance > threshold) {
+      const angle = Math.atan2(offsetY, offsetX) * (180 / Math.PI);
+      
+      if (angle >= -45 && angle < 45) {
+        robot.classList.add('look-right');
+      } else if (angle >= 45 && angle < 135) {
+        robot.classList.add('look-down');
+      } else if (angle >= -135 && angle < -45) {
+        robot.classList.add('look-up');
+      } else {
+        robot.classList.add('look-left');
+      }
+    }
+    
+    // Smooth pupil movement
+    const eyes = document.querySelector('.eyes');
+    const eyesRect = eyes.getBoundingClientRect();
+    const eyeCenterX = eyesRect.left + eyesRect.width / 2;
+    const eyeCenterY = eyesRect.top + eyesRect.height / 2;
+    
+    const maxPupilOffset = 8;
+    const pupilX = (e.clientX - eyeCenterX) / 100 * maxPupilOffset;
+    const pupilY = (e.clientY - eyeCenterY) / 100 * maxPupilOffset;
+    
+    document.querySelectorAll('.eye').forEach(eye => {
+      const pupil = eye.querySelector(':after') || { style: {} };
+      pupil.style.left = (10 + Math.min(Math.max(pupilX, -maxPupilOffset), maxPupilOffset)) + 'px';
+      pupil.style.top = (6 + Math.min(Math.max(pupilY, -maxPupilOffset), maxPupilOffset)) + 'px';
+    });
+  }
+
+  function handleMouseClick(e) {
+    if (!mouseTracking || currentExpression !== '') return;
+    
+    // Flash effect on click
+    const mouseTrack = document.getElementById('mouseTrack');
+    mouseTrack.style.transform = 'scale(2)';
+    mouseTrack.style.opacity = '1';
+    
+    setTimeout(() => {
+      mouseTrack.style.transform = 'scale(1)';
+    }, 200);
+    
+    // Brief surprised expression
+    if (Math.random() > 0.7) {
+      setExpression('surprised');
+      setTimeout(() => {
+        if (currentExpression === 'surprised') {
+          setExpression('');
+        }
+      }, 1000);
+    }
+  }
+
+  function toggleAutoBlink() {
+    autoBlinkEnabled = !autoBlinkEnabled;
+    const status = document.querySelector('.stat:nth-child(2) span:last-child');
+    
+    if (autoBlinkEnabled) {
+      status.textContent = 'Auto-blink: ON';
+      status.parentElement.className = 'stat online';
+      if (currentExpression === '') {
+        startAutoBlink();
+      }
+    } else {
+      status.textContent = 'Auto-blink: OFF';
+      status.parentElement.className = 'stat offline';
+      clearInterval(autoBlinkInterval);
+    }
+  }
+
+  function updateBlinkSpeed() {
+    const slider = document.getElementById('blinkSpeed');
+    const valueDisplay = document.getElementById('blinkSpeedValue');
+    
+    blinkSpeed = parseInt(slider.value);
+    valueDisplay.textContent = (blinkSpeed / 1000).toFixed(1) + 's';
+    
+    if (autoBlinkEnabled && currentExpression === '') {
+      startAutoBlink();
+    }
+  }
+
+  // Initialize
+  window.addEventListener('DOMContentLoaded', () => {
+    setExpression('');
+    startAutoBlink();
+    
+    // Store robot position
+    robotRect = document.getElementById('robot').getBoundingClientRect();
+    
+    // Update robot position on resize
+    window.addEventListener('resize', () => {
+      robotRect = document.getElementById('robot').getBoundingClientRect();
+    });
+    
+    // Random idle behaviors
+    setInterval(() => {
+      if (currentExpression === '' && !mouseTracking && Math.random() > 0.8) {
+        const directions = ['look-left', 'look-right', 'look-up', 'look-down'];
+        const randomDir = directions[Math.floor(Math.random() * directions.length)];
+        const robot = document.getElementById('robot');
+        
+        robot.classList.add(randomDir);
+        setTimeout(() => {
+          robot.classList.remove(randomDir);
+        }, 1000);
+      }
+    }, 5000);
+  });
+</script>
 </body>
 </html>
